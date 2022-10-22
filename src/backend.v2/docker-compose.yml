@@ -1,0 +1,35 @@
+version: "3.2" 
+
+services: 
+  db: 
+    image: sqlite 
+    volumes: 
+      - 'Filename=realworld.db' 
+    restart: always 
+    environment: 
+      SQLITE_ROOT_PASSWORD: root
+      SQLITE_DATABASE: test
+      SQLITEL_USER: test
+      SQLITE_PASSWORD: test
+
+  app_db:
+    build: ./app-db 
+    depends_on: 
+      - db
+    links: #
+      - db
+    environment:
+      DB_HOST: db
+      DB_DATABASE: test      
+      DB_USER: test
+      DB_PASS: test
+
+  app_api:
+    build: ./app-api
+    ports: 
+      - 5000:5000 
+    volumes:
+      - '.:/usr/src/app' 
+
+volumes:
+  mysql:
